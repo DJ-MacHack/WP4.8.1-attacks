@@ -26,15 +26,80 @@ get_header(); ?>
 	<div id="primary" class="content-area">
 		<main id="main" class="site-main" role="main">
 -->
+
+<form method="post" action="stp.php">  
+ Suche: <input type="text" name="search" value="search">
+  <br>
+    <input type="submit" name="submit" value="Submit">  <br>
+</form>
 			<?php
-			echo 'start test page!';
+
+global $jal_db_version;
+$jal_db_version = '1.0';
+
+function jal_install() {
+	global $wpdb;
+	global $jal_db_version;
+
+	$table_name = $wpdb->prefix . 'liveshoutbox';
+	
+	$charset_collate = $wpdb->get_charset_collate();
+
+	$sql = "CREATE TABLE $table_name (
+		id mediumint(9) NOT NULL AUTO_INCREMENT,
+		time datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+		name tinytext NOT NULL,
+		text text NOT NULL,
+		url varchar(55) DEFAULT '' NOT NULL,
+		PRIMARY KEY  (id)
+	) $charset_collate;";
+
+	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	dbDelta( $sql );
+
+	add_option( 'jal_db_version', $jal_db_version );
+}
+
+function jal_install_data() {
+	global $wpdb;
+	
+	$welcome_name = 'Mr. WordPress';
+	$welcome_text = 'Congratulations, you just completed the installation!';
+	
+	$table_name = $wpdb->prefix . 'liveshoutbox';
+	
+	$wpdb->insert( 
+		$table_name, 
+		array( 
+			'time' => current_time( 'mysql' ), 
+			'name' => $welcome_name, 
+			'text' => $welcome_text, 
+		) 
+	);
+}
+?>
+			<?php
+echo 'start test page!<br/>';
 global $wpdb;
-$tablename = $wpdb->prefix . "wp_parts";
-$sql = $wpdb->prepare( "SELECT * FROM %s ORDER BY id DESC",$tablename );
+$tablename = "wp_liveshoutbox";
+$test = "testuser";
+echo $test;
+echo "<br/>";
+$sql = $wpdb->prepare( "SELECT * FROM wp_liveshoutbox WHERE name = %s", $test );
 $results = $wpdb->get_results( $sql , ARRAY_A );
-echo sizeof($results);
 echo count($results);
-echo $results[0];
+echo "<br/>";
+foreach ( $results as $page )
+{
+print_r($page).'<br/>';
+#echo $page[0];
+   #echo $page[0]->text.'<br/>';
+   #echo $page[0]->name.'<br/>';
+}
+#register_activation_hook( __FILE__, 'jal_install' );
+#register_activation_hook( __FILE__, 'jal_install_data' );
+#jal_install();
+#jal_install_data();
 ?>
 <!--
 		</main>
