@@ -82,14 +82,16 @@ function jal_install_data() {
 if (empty($_POST["search"])) {
     echo "search is empty";
   } else { 
-echo $search;
+echo $_POST["search"];
 echo '<br/>start test page!<br/>';
 global $wpdb;
 $tablename = "wp_liveshoutbox";
 #$test = "testuser";
 #echo $test;
 echo "<br/>";
-$sql = $wpdb->prepare( "SELECT * FROM wp_liveshoutbox WHERE name like %s", $search );
+#$input = "test' AND 1 = SLEEP(2); --";
+$sql = $wpdb->prepare( "SELECT * FROM wp_liveshoutbox WHERE name like %s", $_POST["search"] );
+#$sql = $wpdb->prepare( "SELECT * FROM wp_liveshoutbox WHERE name like %s", $input );
 echo '<br/>'.$sql.'<br/>';
 $results = $wpdb->get_results( $sql , ARRAY_A );
 echo 'results: <br/>';
