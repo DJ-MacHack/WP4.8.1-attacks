@@ -27,7 +27,7 @@ get_header(); ?>
 		<main id="main" class="site-main" role="main">
 -->
 
-<form method="post" action="stp.php">  
+<form method="post" action="">  
  Suche: <input type="text" name="search" value="search">
   <br>
     <input type="submit" name="submit" value="Submit">  <br>
@@ -79,23 +79,29 @@ function jal_install_data() {
 }
 ?>
 			<?php
+if (empty($_POST["search"])) {
+    echo "search is empty";
+  } else { 
+echo $search;
 echo 'start test page!<br/>';
 global $wpdb;
 $tablename = "wp_liveshoutbox";
-$test = "testuser";
-echo $test;
+#$test = "testuser";
+#echo $test;
 echo "<br/>";
-$sql = $wpdb->prepare( "SELECT * FROM wp_liveshoutbox WHERE name = %s", $test );
+$sql = $wpdb->prepare( "SELECT * FROM wp_liveshoutbox WHERE name = %s", $search );
 $results = $wpdb->get_results( $sql , ARRAY_A );
+echo 'results: <br/>';
 echo count($results);
 echo "<br/>";
+if( count($results) > 0){
 foreach ( $results as $page )
 {
 print_r($page).'<br/>';
 #echo $page[0];
    #echo $page[0]->text.'<br/>';
    #echo $page[0]->name.'<br/>';
-}
+}}}
 #register_activation_hook( __FILE__, 'jal_install' );
 #register_activation_hook( __FILE__, 'jal_install_data' );
 #jal_install();
@@ -107,3 +113,4 @@ print_r($page).'<br/>';
 </div>
  -->
 <?php get_footer();
+?>
