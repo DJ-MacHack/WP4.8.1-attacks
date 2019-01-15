@@ -28,7 +28,7 @@ get_header(); ?>
 -->
 
 <form method="post" action="">  
- Suche: <input type="text" name="search" value="search">
+ Suche: <input type="text" name="search" value="">
   <br>
     <input type="submit" name="submit" value="Submit">  <br>
 </form>
@@ -83,13 +83,14 @@ if (empty($_POST["search"])) {
     echo "search is empty";
   } else { 
 echo $search;
-echo 'start test page!<br/>';
+echo '<br/>start test page!<br/>';
 global $wpdb;
 $tablename = "wp_liveshoutbox";
 #$test = "testuser";
 #echo $test;
 echo "<br/>";
-$sql = $wpdb->prepare( "SELECT * FROM wp_liveshoutbox WHERE name = %s", $search );
+$sql = $wpdb->prepare( "SELECT * FROM wp_liveshoutbox WHERE name like %s", $search );
+echo '<br/>'.$sql.'<br/>';
 $results = $wpdb->get_results( $sql , ARRAY_A );
 echo 'results: <br/>';
 echo count($results);
